@@ -2,6 +2,17 @@
 let selectedRisk = null;
 let isSubmitting = false;
 
+// Configuración de la API
+const API_CONFIG = {
+    url: 'https://inssurancequotes.azurewebsites.net/api/InsuranceQuoteToOpportunity?', // Reemplazar con la URL real
+    typeOfOpportunity: {
+        hogar: 'Hogar',
+        bicicleta: 'Hogar',
+        caucion: 'Caucion',
+        moto: 'Autos_y_motos'
+    }
+};
+
 // Configuración de campos específicos por riesgo
 const riskFields = {
     hogar: {
@@ -124,19 +135,65 @@ quoteForm.addEventListener('reset', () => {
     submitButton.disabled = true;
 });
 
-function handleFormSubmit(e) {
+async function handleFormSubmit(e) {
     e.preventDefault();
+    
     if (!selectedRisk) {
         showNotification('Por favor, selecciona un tipo de riesgo', 'error');
         return;
     }
+    
+    if (isSubmitting) {
+        return;
+    }
+    
+    isSubmitting = true;
     submitButton.disabled = true;
     submitButton.textContent = 'Enviando...';
-    setTimeout(() => {
-        showNotification('Cotización enviada exitosamente. Nos pondremos en contacto contigo pronto.', 'success');
-        quoteForm.reset();
+    
+    try {
+        // Recopilar todos los datos del formulario
+        const formData = new FormData(quoteForm);
+        const formObject = {};
+        
+        // Agregar datos básicos del formulario
+        for (let [key, value] of formData.entries()) {
+            formObject[key] = value;
+        }
+        
+        // Agregar el tipo de oportunidad
+        formObject.typeOfOpportunity = API_CONFIG.typeOfOpportunity[selectedRisk];
+        
+        // Agregar el tipo de riesgo seleccionado
+        formObject.selectedRisk = selectedRisk;
+        
+        // Realizar la petición POST
+        const response = await fetch(API_CONFIG.url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formObject)
+        });
+        
+        if (response.ok) {
+            showNotification('Cotización enviada exitosamente. Nos pondremos en contacto contigo pronto.', 'success');
+            quoteForm.reset();
+            riskSpecificFields.classList.add('hidden');
+            riskCards.forEach(card => card.classList.remove('selected'));
+            selectedRisk = null;
+        } else {
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+        
+    } catch (error) {
+        console.error('Error al enviar la cotización:', error);
+        showNotification('Error al enviar la cotización. Por favor, intenta nuevamente.', 'error');
+    } finally {
+        isSubmitting = false;
+        submitButton.disabled = false;
         submitButton.textContent = 'Solicitar Cotización';
-    }, 1500);
+    }
 }
 
 function showNotification(message, type = 'info') {
