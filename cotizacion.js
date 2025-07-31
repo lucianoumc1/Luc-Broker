@@ -9,7 +9,8 @@ const API_CONFIG = {
         hogar: 'Hogar',
         bicicleta: 'Hogar',
         caucion: 'Caucion',
-        moto: 'Autos_y_motos'
+        moto: 'Autos_y_motos',
+        auto: 'Autos_y_motos'
     }
 };
 
@@ -18,27 +19,27 @@ const riskFields = {
     hogar: {
         title: 'Datos del Hogar',
         fields: [
-            { name: 'direccion', label: 'Dirección *', type: 'text', required: true },
-            { name: 'codigo_postal', label: 'Código Postal *', type: 'text', required: true },
-            { name: 'tipo_vivienda', label: 'Tipo de Vivienda *', type: 'select', required: true, options: [
+            { name: 'direccion', label: 'Dirección', type: 'text', required: false },
+            { name: 'codigo_postal', label: 'Código Postal', type: 'text', required: false },
+            { name: 'tipo_vivienda', label: 'Tipo de Vivienda', type: 'select', required: false, options: [
                 { value: '', label: 'Selecciona...' },
                 { value: 'casa', label: 'Casa' },
                 { value: 'departamento', label: 'Departamento' },
                 { value: 'duplex', label: 'Dúplex' },
                 { value: 'ph', label: 'PH' }
             ]},
-            { name: 'metros_cuadrados', label: 'Metros Cuadrados *', type: 'number', required: true },
-            { name: 'antiguedad', label: 'Antigüedad (años) *', type: 'number', required: true }
+            { name: 'metros_cuadrados', label: 'Metros Cuadrados', type: 'number', required: false },
+            { name: 'antiguedad', label: 'Antigüedad (años)', type: 'number', required: false }
         ]
     },
     bicicleta: {
         title: 'Datos de la Bicicleta',
         fields: [
-            { name: 'marca', label: 'Marca *', type: 'text', required: true },
-            { name: 'modelo', label: 'Modelo *', type: 'text', required: true },
-            { name: 'anio', label: 'Año *', type: 'number', required: true },
-            { name: 'valor_mercado', label: 'Valor de Mercado *', type: 'number', required: true },
-            { name: 'tipo_bicicleta', label: 'Tipo de Bicicleta *', type: 'select', required: true, options: [
+            { name: 'marca', label: 'Marca', type: 'text', required: false },
+            { name: 'modelo', label: 'Modelo', type: 'text', required: false },
+            { name: 'anio', label: 'Año', type: 'number', required: false },
+            { name: 'valor_mercado', label: 'Valor de Mercado', type: 'number', required: false },
+            { name: 'tipo_bicicleta', label: 'Tipo de Bicicleta', type: 'select', required: false, options: [
                 { value: '', label: 'Selecciona...' },
                 { value: 'urbana', label: 'Urbana' },
                 { value: 'mountain_bike', label: 'Mountain Bike' },
@@ -51,28 +52,28 @@ const riskFields = {
     caucion: {
         title: 'Datos de Caución',
         fields: [
-            { name: 'tipo_caucion', label: 'Tipo de Caución *', type: 'select', required: true, options: [
+            { name: 'tipo_caucion', label: 'Tipo de Caución', type: 'select', required: false, options: [
                 { value: '', label: 'Selecciona...' },
                 { value: 'fianza', label: 'Fianza' },
                 { value: 'garantia', label: 'Garantía' },
                 { value: 'licitacion', label: 'Licitación' },
                 { value: 'judicial', label: 'Judicial' }
             ]},
-            { name: 'monto_garantia', label: 'Monto de Garantía *', type: 'number', required: true },
-            { name: 'plazo_meses', label: 'Plazo (meses) *', type: 'number', required: true },
-            { name: 'destino', label: 'Destino de la Caución *', type: 'text', required: true }
+            { name: 'monto_garantia', label: 'Monto de Garantía', type: 'number', required: false },
+            { name: 'plazo_meses', label: 'Plazo (meses)', type: 'number', required: false },
+            { name: 'destino', label: 'Destino de la Caución', type: 'text', required: false }
         ]
     },
     moto: {
         title: 'Datos de la Motocicleta',
         fields: [
-            { name: 'marca', label: 'Marca *', type: 'text', required: true },
-            { name: 'modelo', label: 'Modelo *', type: 'text', required: true },
-            { name: 'anio', label: 'Año *', type: 'number', required: true },
-            { name: 'cilindrada', label: 'Cilindrada (cc) *', type: 'number', required: true },
-            { name: 'patente', label: 'Patente *', type: 'text', required: true },
-            { name: 'valor_mercado', label: 'Valor de Mercado *', type: 'number', required: true },
-            { name: 'uso_vehiculo', label: 'Uso del Vehículo *', type: 'select', required: true, options: [
+            { name: 'marca', label: 'Marca', type: 'text', required: false },
+            { name: 'modelo', label: 'Modelo', type: 'text', required: false },
+            { name: 'anio', label: 'Año', type: 'number', required: false },
+            { name: 'cilindrada', label: 'Cilindrada (cc)', type: 'number', required: false },
+            { name: 'patente', label: 'Patente', type: 'text', required: false },
+            { name: 'valor_mercado', label: 'Valor de Mercado', type: 'number', required: false },
+            { name: 'uso_vehiculo', label: 'Uso del Vehículo', type: 'select', required: false, options: [
                 { value: '', label: 'Selecciona...' },
                 { value: 'particular', label: 'Particular' },
                 { value: 'comercial', label: 'Comercial' },
@@ -108,8 +109,57 @@ function selectRisk(riskType) {
     const selectedCard = document.getElementById(`risk-${riskType}`);
     if (selectedCard) selectedCard.classList.add('selected');
     selectedRisk = riskType;
+    
+    // Ocultar mensaje de próximamente si existe
+    const comingSoonSection = document.getElementById('comingSoonSection');
+    if (comingSoonSection) {
+        comingSoonSection.remove();
+    }
+    
+    // Caso especial para auto - mostrar mensaje de próximamente
+    if (riskType === 'auto') {
+        showComingSoonMessage();
+        submitButton.disabled = true;
+        return;
+    }
+    
+    // Mostrar formulario de contacto para otros tipos de riesgo
+    const contactForm = document.getElementById('contactForm');
+    contactForm.classList.remove('hidden');
+    
     showRiskSpecificFields(riskType);
     submitButton.disabled = false;
+}
+
+function showComingSoonMessage() {
+    // Ocultar el formulario de contacto
+    const contactForm = document.getElementById('contactForm');
+    contactForm.classList.add('hidden');
+    
+    // Mostrar mensaje de próximamente en lugar del formulario
+    const mainContent = document.querySelector('main');
+    
+    // Crear o actualizar el mensaje de próximamente
+    let comingSoonSection = document.getElementById('comingSoonSection');
+    if (!comingSoonSection) {
+        comingSoonSection = document.createElement('div');
+        comingSoonSection.id = 'comingSoonSection';
+        comingSoonSection.className = 'bg-white rounded-lg shadow-sm border border-secondary-200 p-6 fade-in';
+        mainContent.appendChild(comingSoonSection);
+    }
+    
+    comingSoonSection.innerHTML = `
+        <div class="text-center py-12">
+            <div class="w-20 h-20 mx-auto mb-6 bg-primary-100 rounded-full flex items-center justify-center">
+                <svg class="w-10 h-10 text-primary-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+                    <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1V8a1 1 0 00-1-1h-3z" />
+                </svg>
+            </div>
+            <h3 class="text-2xl font-bold text-secondary-900 mb-4">Próximamente...</h3>
+            <p class="text-lg text-secondary-600 max-w-md mx-auto">Estamos trabajando para ofrecerte la mejor cotización de seguros para automóviles. ¡Muy pronto estará disponible!</p>
+        </div>
+    `;
 }
 
 function showRiskSpecificFields(riskType) {
@@ -133,6 +183,16 @@ quoteForm.addEventListener('reset', () => {
     riskCards.forEach(card => card.classList.remove('selected'));
     selectedRisk = null;
     submitButton.disabled = true;
+    
+    // Ocultar mensaje de próximamente si existe
+    const comingSoonSection = document.getElementById('comingSoonSection');
+    if (comingSoonSection) {
+        comingSoonSection.remove();
+    }
+    
+    // Mostrar formulario de contacto
+    const contactForm = document.getElementById('contactForm');
+    contactForm.classList.remove('hidden');
 });
 
 async function handleFormSubmit(e) {
@@ -161,11 +221,17 @@ async function handleFormSubmit(e) {
             formObject[key] = value;
         }
         
+        // Combinar nombre y apellido en un solo campo name
+        const nombre = formObject.name || '';
+        const apellido = formObject.lastName || '';
+        formObject.name = `${nombre} ${apellido}`.trim();
+        
+        // Eliminar el campo lastName ya que está incluido en name
+        delete formObject.lastName;
+        
         // Agregar el tipo de oportunidad
         formObject.typeOfOpportunity = API_CONFIG.typeOfOpportunity[selectedRisk];
         
-        // Agregar el tipo de riesgo seleccionado
-        formObject.selectedRisk = selectedRisk;
         
         // Realizar la petición POST
         const response = await fetch(API_CONFIG.url, {
