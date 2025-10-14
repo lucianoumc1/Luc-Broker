@@ -7,9 +7,8 @@ const API_CONFIG = {
     url: 'https://inssurancequotes.azurewebsites.net/api/InsuranceQuoteToOpportunity?', // Reemplazar con la URL real
     typeOfOpportunity: {
         hogar: 'Hogar',
-        bicicleta: 'Hogar',
-        caucion: 'Caucion',
-        moto: 'Autos_y_motos',
+        alquiler: 'Alquiler',
+        vida: 'Vida Obligatorio',
         auto: 'Autos_y_motos'
     }
 };
@@ -19,75 +18,81 @@ const riskFields = {
     hogar: {
         title: 'Datos del Hogar',
         fields: [
-            { name: 'direccion', label: 'Dirección', type: 'text', required: false },
-            { name: 'codigo_postal', label: 'Código Postal', type: 'text', required: false },
-            { name: 'tipo_vivienda', label: 'Tipo de Vivienda', type: 'select', required: false, options: [
+            { name: 'cp', label: 'CP', type: 'text', required: false },
+            { name: 'tipo_propiedad', label: 'Tipo de propiedad', type: 'select', required: false, options: [
                 { value: '', label: 'Selecciona...' },
                 { value: 'casa', label: 'Casa' },
-                { value: 'departamento', label: 'Departamento' },
-                { value: 'duplex', label: 'Dúplex' },
-                { value: 'ph', label: 'PH' }
+                { value: 'departamento_pb_ph', label: 'Departamento en PB O 1° PISO/ PH' },
+                { value: 'departamento_2mas', label: 'Departamento a partir 2° PISO' },
+                { value: 'barrio_cerrado', label: 'Vive en barrio cerrado o country.' }
             ]},
-            { name: 'metros_cuadrados', label: 'Metros Cuadrados', type: 'number', required: false },
-            { name: 'antiguedad', label: 'Antigüedad (años)', type: 'number', required: false }
+            { name: 'tipo_uso', label: 'Tipo de Uso', type: 'select', required: false, options: [
+                { value: '', label: 'Selecciona...' },
+                { value: 'permanente', label: 'Permanente, vivo ahí' },
+                { value: 'temporal', label: 'Temporal transitorio' },
+                { value: 'alquilo', label: 'Alquilo Propiedad' }
+            ]},
+            { name: 'metros_cubiertos', label: 'Metros Cubiertos (m2)', type: 'number', required: false }
         ]
     },
-    bicicleta: {
-        title: 'Datos de la Bicicleta',
+    alquiler: {
+        title: 'Datos de Alquiler',
         fields: [
-            { name: 'marca', label: 'Marca', type: 'text', required: false },
-            { name: 'modelo', label: 'Modelo', type: 'text', required: false },
-            { name: 'anio', label: 'Año', type: 'number', required: false },
-            { name: 'valor_mercado', label: 'Valor de Mercado', type: 'number', required: false },
-            { name: 'tipo_bicicleta', label: 'Tipo de Bicicleta', type: 'select', required: false, options: [
-                { value: '', label: 'Selecciona...' },
-                { value: 'urbana', label: 'Urbana' },
-                { value: 'mountain_bike', label: 'Mountain Bike' },
-                { value: 'ruta', label: 'Ruta' },
-                { value: 'bmx', label: 'BMX' },
-                { value: 'electrica', label: 'Eléctrica' }
-            ]}
-        ]
-    },
-    caucion: {
-        title: 'Datos de Caución',
-        fields: [
-            { name: 'tipo_caucion', label: 'Tipo de Caución', type: 'select', required: false, options: [
-                { value: '', label: 'Selecciona...' },
-                { value: 'fianza', label: 'Fianza' },
-                { value: 'garantia', label: 'Garantía' },
-                { value: 'licitacion', label: 'Licitación' },
-                { value: 'judicial', label: 'Judicial' }
-            ]},
-            { name: 'monto_garantia', label: 'Monto de Garantía', type: 'number', required: false },
+            { name: 'monto_alquiler', label: 'Monto de Alquiler', type: 'number', required: false },
             { name: 'plazo_meses', label: 'Plazo (meses)', type: 'number', required: false },
-            { name: 'destino', label: 'Destino de la Caución', type: 'text', required: false }
-        ]
-    },
-    moto: {
-        title: 'Datos de la Motocicleta',
-        fields: [
-            { name: 'marca', label: 'Marca', type: 'text', required: false },
-            { name: 'modelo', label: 'Modelo', type: 'text', required: false },
-            { name: 'anio', label: 'Año', type: 'number', required: false },
-            { name: 'cilindrada', label: 'Cilindrada (cc)', type: 'number', required: false },
-            { name: 'patente', label: 'Patente', type: 'text', required: false },
-            { name: 'valor_mercado', label: 'Valor de Mercado', type: 'number', required: false },
-            { name: 'uso_vehiculo', label: 'Uso del Vehículo', type: 'select', required: false, options: [
+            { name: 'tipo_alquiler', label: 'Tipo de Alquiler', type: 'select', required: false, options: [
                 { value: '', label: 'Selecciona...' },
                 { value: 'particular', label: 'Particular' },
                 { value: 'comercial', label: 'Comercial' },
                 { value: 'trabajo', label: 'Trabajo' }
-            ]}
+            ]},
+            { name: 'comentarios', label: 'Comentarios', type: 'textarea', required: false }
+        ]
+    },
+    vida: {
+        title: 'Datos de Vida',
+        fields: [
+            { name: 'comentarios', label: 'Comentarios', type: 'textarea', required: false }
         ]
     }
 };
+
+// Intro por riesgo (título + descripción)
+const riskIntroConfig = {
+    hogar: {
+        title: 'Seguro de Hogar',
+        desc: 'Protegé tu vivienda con coberturas flexibles y asistencia las 24hs. Texto de ejemplo.'
+    },
+    alquiler: {
+        title: 'Caución Garantía de Alquiler Particular',
+        desc: 'Tarifa Preferencial'
+    },
+    vida: {
+        title: 'Vida - Múltiplo de sueldo empleado y cónyuge',
+        desc: 'Tarifa Preferencial'
+    }
+};
+
+function renderRiskIntro(riskType) {
+    if (!riskIntro) return;
+    const intro = riskIntroConfig[riskType];
+    if (!intro) {
+        riskIntro.classList.add('hidden');
+        return;
+    }
+    riskIntroTitle.textContent = intro.title;
+    riskIntroDesc.textContent = intro.desc;
+    riskIntro.classList.remove('hidden');
+}
 
 // Elementos del DOM
 const riskCards = document.querySelectorAll('.risk-card');
 const riskSpecificFields = document.getElementById('riskSpecificFields');
 const riskSpecificTitle = document.getElementById('riskSpecificTitle');
 const riskSpecificContent = document.getElementById('riskSpecificContent');
+const riskIntro = document.getElementById('riskIntro');
+const riskIntroTitle = document.getElementById('riskIntroTitle');
+const riskIntroDesc = document.getElementById('riskIntroDesc');
 const quoteForm = document.getElementById('quoteForm');
 const submitButton = document.getElementById('submitButton');
 
@@ -118,6 +123,12 @@ function selectRisk(riskType) {
     
     // Caso especial para auto - mostrar mensaje de próximamente
     if (riskType === 'auto') {
+        // Ocultar intro
+        if (riskIntro) {
+            riskIntro.classList.add('hidden');
+            riskIntroTitle.textContent = '';
+            riskIntroDesc.textContent = '';
+        }
         showComingSoonMessage();
         submitButton.disabled = true;
         return;
@@ -127,6 +138,9 @@ function selectRisk(riskType) {
     const contactForm = document.getElementById('contactForm');
     contactForm.classList.remove('hidden');
     
+    // Render intro
+    renderRiskIntro(riskType);
+
     showRiskSpecificFields(riskType);
     submitButton.disabled = false;
 }
@@ -165,10 +179,25 @@ function showComingSoonMessage() {
 function showRiskSpecificFields(riskType) {
     const riskConfig = riskFields[riskType];
     if (!riskConfig) return;
+    renderRiskIntro(riskType);
     riskSpecificTitle.textContent = riskConfig.title;
     riskSpecificContent.innerHTML = riskConfig.fields.map(field => {
         if (field.type === 'select') {
             return `<div><label for="${field.name}" class="block text-sm font-medium text-secondary-700 mb-2">${field.label}</label><select id="${field.name}" name="${field.name}" ${field.required ? 'required' : ''} class="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">${field.options.map(opt => `<option value="${opt.value}">${opt.label}</option>`).join('')}</select></div>`;
+        } else if (field.type === 'radio') {
+            return `<div>
+                <span class="block text-sm font-medium text-secondary-700 mb-2">${field.label}</span>
+                <div class="flex items-center space-x-6">
+                    ${field.options.map(opt => `
+                        <label class="inline-flex items-center space-x-2">
+                            <input type="radio" name="${field.name}" value="${opt.value}" ${field.required ? 'required' : ''} class="text-primary-600 focus:ring-primary-500">
+                            <span class="text-sm text-secondary-800">${opt.label}</span>
+                        </label>
+                    `).join('')}
+                </div>
+            </div>`;
+        } else if (field.type === 'textarea') {
+            return `<div><label for="${field.name}" class="block text-sm font-medium text-secondary-700 mb-2">${field.label}</label><textarea id="${field.name}" name="${field.name}" rows="3" ${field.required ? 'required' : ''} class="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"></textarea></div>`;
         } else {
             return `<div><label for="${field.name}" class="block text-sm font-medium text-secondary-700 mb-2">${field.label}</label><input type="${field.type}" id="${field.name}" name="${field.name}" ${field.required ? 'required' : ''} class="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"></div>`;
         }
@@ -193,6 +222,13 @@ quoteForm.addEventListener('reset', () => {
     // Mostrar formulario de contacto
     const contactForm = document.getElementById('contactForm');
     contactForm.classList.remove('hidden');
+
+    // Limpiar intro
+    if (riskIntro) {
+        riskIntro.classList.add('hidden');
+        riskIntroTitle.textContent = '';
+        riskIntroDesc.textContent = '';
+    }
 });
 
 async function handleFormSubmit(e) {

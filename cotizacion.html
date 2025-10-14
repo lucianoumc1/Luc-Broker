@@ -115,59 +115,46 @@
                 </svg>
                 Selecciona el Tipo de Riesgo
             </h3>
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <!-- Hogar -->
                 <div id="risk-hogar" class="risk-card bg-white border-2 border-secondary-200 rounded-lg p-6 text-center cursor-pointer hover:shadow-md">
-                    <div class="w-12 h-12 mx-auto mb-4 bg-primary-100 rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-primary-600" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l1.293-1.293a1 1 0 00-1.414-1.414l-7-7z" />
-                        </svg>
+                    <div class="w-12 h-12 mx-auto mb-4 rounded-lg flex items-center justify-center">
+                        <img src="./assets/home-icon-removebg-preview.png" alt="Hogar" class="w-8 h-8 object-contain">
                     </div>
                     <h4 class="font-semibold text-secondary-900 mb-2">Hogar</h4>
                     <p class="text-sm text-secondary-600">Protección integral para tu vivienda</p>
                 </div>
-                <!-- Bicicleta -->
-                <div id="risk-bicicleta" class="risk-card bg-white border-2 border-secondary-200 rounded-lg p-6 text-center cursor-pointer hover:shadow-md">
-                    <div class="w-12 h-12 mx-auto mb-4 bg-primary-100 rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-primary-600" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M5 16a3 3 0 100-6 3 3 0 000 6zm10 0a3 3 0 100-6 3 3 0 000 6zM7 16h6m-6-4h6m-6-4h6m-6-4h6" />
-                        </svg>
+                <!-- Alquiler -->
+                <div id="risk-alquiler" class="risk-card bg-white border-2 border-secondary-200 rounded-lg p-6 text-center cursor-pointer hover:shadow-md">
+                    <div class="w-12 h-12 mx-auto mb-4 rounded-lg flex items-center justify-center">
+                        <img src="./assets/alquiler-removebg-preview.png" alt="Alquiler" class="w-8 h-8 object-contain">
                     </div>
-                    <h4 class="font-semibold text-secondary-900 mb-2">Bicicleta</h4>
-                    <p class="text-sm text-secondary-600">Cobertura para tu bicicleta</p>
+                    <h4 class="font-semibold text-secondary-900 mb-2">Alquiler</h4>
+                    <p class="text-sm text-secondary-600">Garantía de alquiler</p>
                 </div>
-                <!-- Caución -->
-                <div id="risk-caucion" class="risk-card bg-white border-2 border-secondary-200 rounded-lg p-6 text-center cursor-pointer hover:shadow-md">
-                    <div class="w-12 h-12 mx-auto mb-4 bg-primary-100 rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-primary-600" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M5 9V7a5 5 0 1110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
-                        </svg>
+                <!-- Vida -->
+                <div id="risk-vida" class="risk-card bg-white border-2 border-secondary-200 rounded-lg p-6 text-center cursor-pointer hover:shadow-md">
+                    <div class="w-12 h-12 mx-auto mb-4 rounded-lg flex items-center justify-center">
+                        <img src="./assets/vida-icon-removebg-preview.png" alt="Vida" class="w-8 h-8 object-contain">
                     </div>
-                    <h4 class="font-semibold text-secondary-900 mb-2">Caución</h4>
-                    <p class="text-sm text-secondary-600">Garantías y fianzas</p>
-                </div>
-                <!-- Moto -->
-                <div id="risk-moto" class="risk-card bg-white border-2 border-secondary-200 rounded-lg p-6 text-center cursor-pointer hover:shadow-md">
-                    <div class="w-12 h-12 mx-auto mb-4 bg-primary-100 rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-primary-600" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M4 13a3 3 0 100-6 3 3 0 000 6zm12 0a3 3 0 100-6 3 3 0 000 6zM7 13h6m-6-4h6m-6-4h6m-6-4h6" />
-                        </svg>
-                    </div>
-                    <h4 class="font-semibold text-secondary-900 mb-2">Moto</h4>
-                    <p class="text-sm text-secondary-600">Seguro para motocicletas</p>
+                    <h4 class="font-semibold text-secondary-900 mb-2">Vida</h4>
+                    <p class="text-sm text-secondary-600">Protección personal</p>
                 </div>
                 <!-- Auto -->
                 <div id="risk-auto" class="risk-card bg-white border-2 border-secondary-200 rounded-lg p-6 text-center cursor-pointer hover:shadow-md">
-                    <div class="w-12 h-12 mx-auto mb-4 bg-primary-100 rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-primary-600" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
-                            <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1V8a1 1 0 00-1-1h-3z" />
-                        </svg>
+                    <div class="w-12 h-12 mx-auto mb-4 rounded-lg flex items-center justify-center">
+                        <img src="./assets/auto-icon-removebg-preview.png" alt="Auto" class="w-8 h-8 object-contain">
                     </div>
                     <h4 class="font-semibold text-secondary-900 mb-2">Auto</h4>
                     <p class="text-sm text-secondary-600">Seguro para automóviles</p>
                 </div>
             </div>
+        </div>
+
+        <!-- Intro por Riesgo -->
+        <div id="riskIntro" class="bg-white rounded-lg shadow-sm border border-secondary-200 p-6 fade-in hidden mb-4">
+            <h4 id="riskIntroTitle" class="text-md font-semibold text-secondary-900 mb-2"></h4>
+            <p id="riskIntroDesc" class="text-secondary-700"></p>
         </div>
 
         <!-- Contact Form Section -->

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejemplo de Integración - Formulario de Cotización</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .iframe-container {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        iframe {
+            width: 100%;
+            border: none;
+            display: block;
+        }
+        .code-example {
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        .responsive-iframe {
+            height: 100vh;
+            min-height: 600px;
+        }
+        @media (max-width: 768px) {
+            .responsive-iframe {
+                height: 100vh;
+                min-height: 800px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-3xl font-bold text-gray-900 mb-6">Ejemplo de Integración del Formulario de Cotización</h1>
+        
+        <div class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Formulario Embebido</h2>
+            <p class="text-gray-600 mb-4">
+                A continuación se muestra el formulario de cotización embebido en un iframe. 
+                Este formulario puede ser integrado en cualquier sitio web.
+            </p>
+            
+            <div class="iframe-container">
+                <iframe 
+                    src="cotizacion-iframe.html" 
+                    class="responsive-iframe"
+                    title="Formulario de Cotización de Seguros"
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+
+        <div class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Código de Integración</h2>
+            <p class="text-gray-600 mb-4">
+                Para integrar este formulario en tu sitio web, copia y pega el siguiente código HTML:
+            </p>
+            
+            <div class="code-example">
+&lt;!-- Formulario de Cotización de Seguros --&gt;
+&lt;div style="border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; margin: 20px 0;"&gt;
+    &lt;iframe 
+        src="https://tu-dominio.com/cotizacion-iframe.html" 
+        style="width: 100%; height: 100vh; min-height: 600px; border: none; display: block;"
+        title="Formulario de Cotización de Seguros"
+        allowfullscreen&gt;
+    &lt;/iframe&gt;
+&lt;/div&gt;
+
+&lt;!-- Alternativa: Si necesitas un tamaño fijo --&gt;
+&lt;iframe 
+    src="https://tu-dominio.com/cotizacion-iframe.html" 
+    style="width: 100%; height: 700px; border: none; display: block;"
+    title="Formulario de Cotización de Seguros"&gt;
+&lt;/iframe&gt;
+            </div>
+        </div>
+
+        <div class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Funcionamiento del JavaScript</h2>
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                <h3 class="font-semibold text-blue-800 mb-2">✅ JavaScript Funciona Perfectamente</h3>
+                <p class="text-blue-700 mb-2">
+                    El archivo <code>cotizacion.js</code> se importa correctamente en el iframe:
+                </p>
+                <ul class="list-disc list-inside text-blue-700 space-y-1">
+                    <li>El iframe carga su propio documento HTML completo</li>
+                    <li>El script se ejecuta de forma independiente dentro del iframe</li>
+                    <li>Todas las funcionalidades funcionan: selección de riesgo, validación, envío de datos</li>
+                    <li>No hay conflictos con el JavaScript del sitio padre</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Características del Formulario</h2>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+                <li>✅ <strong>Responsive:</strong> Se adapta automáticamente a diferentes tamaños de pantalla</li>
+                <li>✅ <strong>Sin dependencias externas:</strong> Solo requiere Tailwind CSS (incluido via CDN)</li>
+                <li>✅ <strong>Funcionalidad completa:</strong> Incluye todos los tipos de seguro disponibles</li>
+                <li>✅ <strong>Validación:</strong> Campos obligatorios y validación de formulario</li>
+                <li>✅ <strong>Envió de datos:</strong> Configurado para enviar datos a tu API</li>
+                <li>✅ <strong>Diseño profesional:</strong> Interfaz moderna y atractiva</li>
+            </ul>
+        </div>
+
+        <div class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Configuración Requerida</h2>
+            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <h3 class="font-semibold text-yellow-800 mb-2">⚠️ Importante</h3>
+                <p class="text-yellow-700 mb-2">
+                    Antes de usar el formulario en producción, asegúrate de:
+                </p>
+                <ul class="list-disc list-inside text-yellow-700 space-y-1">
+                    <li>Actualizar la URL de la API en el archivo <code>cotizacion.js</code></li>
+                    <li>Configurar los valores correctos para <code>typeOfOpportunity</code></li>
+                    <li>Probar el envío de datos en un entorno de desarrollo</li>
+                    <li>Verificar que el dominio donde se aloja el formulario esté en la lista blanca de CORS</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Personalización</h2>
+            <p class="text-gray-600 mb-4">
+                El formulario puede ser personalizado modificando:
+            </p>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+                <li><strong>Colores:</strong> Modifica las variables de color en la configuración de Tailwind</li>
+                <li><strong>Tipos de seguro:</strong> Agrega o modifica los tipos de riesgo en <code>riskFields</code></li>
+                <li><strong>Campos:</strong> Personaliza los campos específicos de cada tipo de seguro</li>
+                <li><strong>Mensajes:</strong> Cambia los textos y mensajes del formulario</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html> 
