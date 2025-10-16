@@ -4,7 +4,9 @@ let isSubmitting = false;
 
 // Configuración de la API
 const API_CONFIG = {
-  url: "http://localhost:7071/api/InsuranceQuoteToOpportunity", // Reemplazar con la URL real
+  url: "https://inssurancequotes.azurewebsites.net/api/InsuranceQuoteToOpportunity?",
+  brandsUrl: "https://vehiclesservice.azurewebsites.net/api/getBrand", // Endpoint para obtener marcas de vehículos
+  modelsUrl: "https://vehiclesservice.azurewebsites.net/api/getModels", // Endpoint para obtener modelos por marca/año
   typeOfOpportunity: {
     hogar: "Hogar",
     alquiler: "Caucion",
@@ -12,6 +14,24 @@ const API_CONFIG = {
     auto: "Autos_y_motos",
   },
 };
+
+// Generador de opciones de años
+function generateYearOptions(startYear, endYear) {
+  const options = [{ value: "", label: "Selecciona..." }];
+  for (let year = endYear; year >= startYear; year--) {
+    options.push({ value: String(year), label: String(year) });
+  }
+  return options;
+}
+
+// Utilidad para setear opciones en un select ya renderizado
+function setSelectOptions(selectId, options) {
+  const select = document.getElementById(selectId);
+  if (!select) return;
+  select.innerHTML = options
+    .map((opt) => `<option value="${opt.value}">${opt.label}</option>`)
+    .join("");
+}
 
 // Configuración de campos específicos por riesgo
 const riskFields = {
@@ -21,32 +41,39 @@ const riskFields = {
       {
         name: "brand",
         label: "Marca",
-        type: "text",
-        required: true,
+        type: "select",
+        required: false,
+        options: [
+          { value: "", label: "Cargando marcas..." }
+        ],
       },
       {
         name: "year",
         label: "Año",
-        type: "text",
-        required: true,
+        type: "select",
+        required: false,
+        options: generateYearOptions(1998, 2025),
       },
       {
         name: "model",
         label: "Modelo",
-        type: "text",
-        required: true,
+        type: "select",
+        required: false,
+        options: [
+          { value: "", label: "Selecciona una marca y año..." }
+        ],
       },
       {
         name: "postalCode",
         label: "Codigo Postal",
         type: "number",
-        required: true,
+        required: false,
       },
       {
         name: "age",
         label: "Edad",
         type: "number",
-        required: true,
+        required: false,
       },      {
         name: "gender",
         label: "Genero",
@@ -55,7 +82,7 @@ const riskFields = {
           { value: "M", label: "Masculino" },
           { value: "F", label: "Femenino" },
         ],
-        required: true,
+        required: false,
       },
       {
         name: "hasCNG",
@@ -147,7 +174,7 @@ const riskFields = {
           { label: "Semestral", value: "S" },
           { label: "Anual", value: "A" },
         ],
-        required: true,
+        required: false,
       },
       {
         name: "comments",
@@ -170,7 +197,7 @@ const riskFields = {
         name: "spouseQuotes",
         label: "Cotiza conyuge",
         type: "checkbox",
-        required: true
+        required: false
       },
       {
         name: "comments",
@@ -212,6 +239,115 @@ function renderRiskIntro(riskType) {
   riskIntroTitle.textContent = intro.title;
   riskIntroDesc.textContent = intro.desc;
   riskIntro.classList.remove("hidden");
+}
+
+// Función para cargar marcas desde el endpoint
+async function loadBrands() {
+  // Asegurar acceso a brandField también en el catch
+  const brandField = riskFields.auto.fields.find(field => field.name === "brand");
+  try {
+    // Mostrar estado de carga
+    if (brandField) {
+      brandField.options = [
+        { value: "", label: "Cargando marcas..." }
+      ];
+    }
+
+    // Evitar preflight CORS: no enviar headers no simples en GET
+    const response = await fetch(API_CONFIG.brandsUrl, { method: "GET" });
+
+    if (!response.ok) {
+      throw new Error(`Error ${response.status}: ${response.statusText}`);
+    }
+
+    const brands = await response.json();
+    
+    // Validar que la respuesta sea un array
+    if (!Array.isArray(brands)) {
+      throw new Error("Formato de respuesta inválido: se esperaba un array de marcas");
+    }
+    
+    // Actualizar las opciones del campo de marca
+    if (brandField) {
+      brandField.options = [
+        { value: "", label: "Selecciona una marca..." },
+        ...brands.map(brand => ({
+          value: brand.id || brand.value || brand,
+          label: brand.name || brand.label || brand
+        }))
+      ];
+    }
+
+    return brands;
+  } catch (error) {
+    console.error("Error al cargar las marcas:", error);
+    
+    // Mostrar notificación de error
+    showNotification("Error con el servicio de infoauto. Por favor, intenta nuevamente mas tarde.", "error");
+    
+    // En caso de error, mantener la opción de error
+    if (brandField) {
+      brandField.options = [
+        { value: "", label: "Error al cargar marcas - Recargar página" }
+      ];
+    }
+    
+    throw error;
+  }
+}
+
+// Función para cargar modelos según marca y año
+async function loadModels(brandCode, year) {
+  const modelField = riskFields.auto.fields.find(field => field.name === "model");
+  try {
+    if (modelField) {
+      modelField.options = [
+        { value: "", label: "Cargando modelos..." }
+      ];
+    }
+    setSelectOptions("model", modelField ? modelField.options : [{ value: "", label: "Cargando modelos..." }]);
+
+    const url = `${API_CONFIG.modelsUrl}?brand=${encodeURIComponent(brandCode)}&year=${encodeURIComponent(year)}`;
+    const response = await fetch(url, { method: "GET" });
+    if (!response.ok) {
+      throw new Error(`Error ${response.status}: ${response.statusText}`);
+    }
+
+    const models = await response.json();
+
+    
+    if (models.length < 1) {
+      showNotification("No hay modelos disponibles.", "warning");
+      models.push({codInfoAuto:0, name: "Sin modelos disponibles"})
+    }else{
+      models.unshift({codInfoAuto:0, name: "Seleccione un modelo..."})
+    }
+
+    const options = [
+      ...models.map(m => ({
+        value: m.codInfoAuto,
+        label: m.name 
+      }))
+    ]; 
+
+    if (modelField) {
+      modelField.options = options;
+    }
+
+    setSelectOptions("model", options);
+    return models;
+  } catch (error) {
+    console.error("Error al cargar los modelos:", error);
+    showNotification("Error cargando modelos. Intenta nuevamente más tarde.", "error");
+    const options = [
+      { value: "", label: "Sin modelos disponibles..." }
+    ];
+    if (modelField) {
+      modelField.options = options;
+    }
+    setSelectOptions("model", options);
+    throw error;
+  }
 }
 
 // Elementos del DOM
@@ -259,11 +395,22 @@ function selectRisk(riskType) {
 }
 
 
-function showRiskSpecificFields(riskType) {
+async function showRiskSpecificFields(riskType) {
   const riskConfig = riskFields[riskType];
   if (!riskConfig) return;
   renderRiskIntro(riskType);
   riskSpecificTitle.textContent = riskConfig.title;
+  
+  // Si es el riesgo auto, cargar las marcas primero
+  if (riskType === "auto") {
+    try {
+      await loadBrands();
+    } catch (error) {
+      console.error("Error al cargar marcas:", error);
+      // Continuar con el renderizado aunque haya error
+    }
+  }
+  
   riskSpecificContent.innerHTML = riskConfig.fields
     .map((field) => {
       if (field.type === "select") {
@@ -328,6 +475,46 @@ function showRiskSpecificFields(riskType) {
     .join("");
   riskSpecificFields.classList.remove("hidden");
   riskSpecificFields.classList.add("fade-in");
+  
+  // Agregar event listener para recargar marcas si hay error
+  if (riskType === "auto") {
+    const brandSelect = document.getElementById("brand");
+    const yearSelect = document.getElementById("year");
+    const modelSelect = document.getElementById("model");
+    if (brandSelect && brandSelect.value === "" && brandSelect.options[0].text.includes("Error")) {
+      brandSelect.addEventListener("change", async function() {
+        if (this.value === "" && this.options[0].text.includes("Error")) {
+          try {
+            await loadBrands();
+            // Re-renderizar el campo de marca
+            const brandField = riskFields.auto.fields.find(field => field.name === "brand");
+            if (brandField) {
+              this.innerHTML = brandField.options
+                .map((opt) => `<option value="${opt.value}">${opt.label}</option>`)
+                .join("");
+            }
+          } catch (error) {
+            console.error("Error al recargar marcas:", error);
+          }
+        }
+      });
+    }
+
+    // Cargar modelos cuando haya marca y año seleccionados
+    async function tryLoadModels() {
+      const brandCode = brandSelect ? brandSelect.value : "";
+      const year = yearSelect ? yearSelect.value : "";
+      if (brandCode && year) {
+        await loadModels(brandCode, year);
+      } else if (modelSelect) {
+        // Resetear modelos si falta alguno
+        setSelectOptions("model", [{ value: "", label: "Selecciona una marca y año..." }]);
+      }
+    }
+
+    if (brandSelect) brandSelect.addEventListener("change", tryLoadModels);
+    if (yearSelect) yearSelect.addEventListener("change", tryLoadModels);
+  }
 }
 
 quoteForm.addEventListener("reset", () => {
@@ -380,10 +567,47 @@ async function handleFormSubmit(e) {
       formObject[key] = value;
     }
 
+    // Validaciones previas de selects requeridos para auto
+    const brandSelectEl = document.getElementById("brand");
+    const yearSelectEl = document.getElementById("year");
+    const modelSelectEl = document.getElementById("model");
+    if (selectedRisk === "auto") {
+      const brandValue = brandSelectEl ? brandSelectEl.value : "";
+      const yearValue = yearSelectEl ? yearSelectEl.value : "";
+      const modelValue = modelSelectEl ? modelSelectEl.value : "";
+      if (!brandValue) {
+        showNotification("Seleccioná una marca.", "warning");
+        throw new Error("Marca no seleccionada");
+      }
+      if (!yearValue) {
+        showNotification("Seleccioná un año.", "warning");
+        throw new Error("Año no seleccionado");
+      }
+      if (!modelValue || modelValue === "0") {
+        showNotification("Seleccioná un modelo válido.", "warning");
+        throw new Error("Modelo no válido");
+      }
+    }
+
     // Combinar nombre y apellido en un solo campo name
     const nombre = formObject.name || "";
     const apellido = formObject.lastName || "";
     formObject.name = `${nombre} ${apellido}`.trim();
+
+
+    // Separar modelo y codigo infoauto
+    const selectedModelOption = modelSelectEl ? modelSelectEl.options[modelSelectEl.selectedIndex] : null;
+    const modelName = selectedModelOption ? selectedModelOption.text : "";
+
+    formObject.codInfoAuto = formObject.model;
+    formObject.model = modelName;
+
+
+    //cambiar marca por descripcion
+    const selectedBrandModelOption = brandSelectEl ? brandSelectEl.options[brandSelectEl.selectedIndex] : null;
+    const brandName = selectedBrandModelOption ? selectedBrandModelOption.text : "";
+
+    formObject.brand = brandName;
 
     // Eliminar el campo lastName ya que está incluido en name
     delete formObject.lastName;
@@ -391,9 +615,8 @@ async function handleFormSubmit(e) {
     // Agregar el tipo de oportunidad
     formObject.typeOfOpportunity = API_CONFIG.typeOfOpportunity[selectedRisk];
 
-
-    console.log(formObject);
-
+    // Envío
+  
     // Realizar la petición POST
     const response = await fetch(API_CONFIG.url, {
       method: "POST",
@@ -402,8 +625,6 @@ async function handleFormSubmit(e) {
       },
       body: JSON.stringify(formObject),
     });
-
-    // const response = {ok:true};
 
     if (response.ok) {
       showNotification(
