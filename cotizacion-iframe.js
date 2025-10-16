@@ -369,8 +369,13 @@ document.addEventListener("DOMContentLoaded", function () {
       selectRisk(riskType);
     });
   });
-  quoteForm.addEventListener("submit", handleFormSubmit);
+  submitButton.disabled = true;
 });
+
+// Callbacks de Cloudflare Turnstile
+window.onTurnstileSuccess = function(token) {
+  submitButton.disabled = false;
+};
 
 function selectRisk(riskType) {
   // Quitar selección previa
@@ -380,18 +385,13 @@ function selectRisk(riskType) {
   if (selectedCard) selectedCard.classList.add("selected");
   selectedRisk = riskType;
 
-  // Ocultar mensaje de próximamente si existe
-  const comingSoonSection = document.getElementById("comingSoonSection");
-  if (comingSoonSection) {
-    comingSoonSection.remove();
-  }
+  
 
   const contactForm = document.getElementById("contactForm");
   contactForm.classList.remove("hidden");
 
   renderRiskIntro(riskType);
   showRiskSpecificFields(riskType);
-  submitButton.disabled = false;
 }
 
 
@@ -524,11 +524,7 @@ quoteForm.addEventListener("reset", () => {
   selectedRisk = null;
   submitButton.disabled = true;
 
-  // Ocultar mensaje de próximamente si existe
-  const comingSoonSection = document.getElementById("comingSoonSection");
-  if (comingSoonSection) {
-    comingSoonSection.remove();
-  }
+  
 
   // Mostrar formulario de contacto
   const contactForm = document.getElementById("contactForm");
@@ -575,17 +571,18 @@ async function handleFormSubmit(e) {
       const brandValue = brandSelectEl ? brandSelectEl.value : "";
       const yearValue = yearSelectEl ? yearSelectEl.value : "";
       const modelValue = modelSelectEl ? modelSelectEl.value : "";
+      console.log(modelValue)
       if (!brandValue) {
         showNotification("Seleccioná una marca.", "warning");
-        throw new Error("Marca no seleccionada");
+        return;
       }
       if (!yearValue) {
         showNotification("Seleccioná un año.", "warning");
-        throw new Error("Año no seleccionado");
+        return;
       }
       if (!modelValue || modelValue === "0") {
         showNotification("Seleccioná un modelo válido.", "warning");
-        throw new Error("Modelo no válido");
+        return;
       }
     }
 
