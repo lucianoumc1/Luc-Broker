@@ -4,7 +4,7 @@ let isSubmitting = false;
 
 // Configuración de la API
 const API_CONFIG = {
-  url: "https://inssurancequotes.azurewebsites.net/api/InsuranceQuoteToOpportunity?",
+  url: "https://quoteform-bqfqhxg9eee3h5by.brazilsouth-01.azurewebsites.net/api/InsuranceQuoteToOpportunity",
   brandsUrl: "https://vehiclesservice.azurewebsites.net/api/getBrand", // Endpoint para obtener marcas de vehículos
   modelsUrl: "https://vehiclesservice.azurewebsites.net/api/getModels", // Endpoint para obtener modelos por marca/año
   typeOfOpportunity: {
