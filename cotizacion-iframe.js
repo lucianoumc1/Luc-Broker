@@ -169,10 +169,10 @@ const riskFields = {
 				type: "select",
 				options: [
 					{ label: "Selecciona...", value: "" },
-					{ label: "Mensual", value: "M" },
-					{ label: "Cuatrimestral", value: "C" },
-					{ label: "Semestral", value: "S" },
-					{ label: "Anual", value: "A" },
+					{ label: "Mensual", value: "Mensual" },
+					{ label: "Cuatrimestral", value: "Cuatrimestral" },
+					{ label: "Semestral", value: "Semestral" },
+					{ label: "Anual", value: "Anual" },
 				],
 				required: false,
 			},
@@ -602,10 +602,14 @@ async function handleFormSubmit(e) {
 			formObject.brand = brandName;
 		}
 
+		// console.log(formObject)
 		// Envío
 		// Realizar la petición POST
 		const response = await fetch(API_CONFIG.url, {
 			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
 			body: JSON.stringify(formObject),
 		});
 
