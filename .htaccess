@@ -1,0 +1,14 @@
+<IfModule mod_headers.c>
+    # Política moderna: Content-Security-Policy
+    Header always set Content-Security-Policy "frame-ancestors 'self' https://cinallibroker.ar"
+
+    # Compatibilidad con navegadores más antiguos
+    Header always set X-Frame-Options "SAMEORIGIN"
+</IfModule>
+
+# Evita que se muestre información del servidor
+ServerSignature Off
+
+# Bloquea listado de archivos en la carpeta
+Options -Indexes
+
