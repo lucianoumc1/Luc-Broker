@@ -4,7 +4,7 @@ let isSubmitting = false;
 
 // Configuración de la API
 const API_CONFIG = {
-	url: "https://quoteform-bqfqhxg9eee3h5by.brazilsouth-01.azurewebsites.net/api/InsuranceQuoteToOpportunity",
+	url: "http://localhost:7071/api/InsuranceQuoteToOpportunity",
 	brandsUrl: "https://vehiclesservice.azurewebsites.net/api/getBrand", // Endpoint para obtener marcas de vehículos
 	modelsUrl: "https://vehiclesservice.azurewebsites.net/api/getModels", // Endpoint para obtener modelos por marca/año
 	typeOfOpportunity: {
@@ -79,8 +79,8 @@ const riskFields = {
 				label: "Genero",
 				type: "radio",
 				options: [
-					{ value: "M", label: "Masculino" },
-					{ value: "F", label: "Femenino" },
+					{ value: "Masculino", label: "Masculino" },
+					{ value: "Femenino", label: "Femenino" },
 				],
 				required: false,
 			},
@@ -120,18 +120,18 @@ const riskFields = {
 				required: false,
 				options: [
 					{ value: "", label: "Selecciona..." },
-					{ value: "casa", label: "Casa" },
+					{ value: "Casa", label: "Casa" },
 					{
-						value: "departamento_pb_ph",
+						value: "Departamento en PB O 1° PISO/ PH",
 						label: "Departamento en PB O 1° PISO/ PH",
 					},
 					{
-						value: "departamento_2mas",
+						value: "Departamento a partir 2° PISO",
 						label: "Departamento a partir 2° PISO",
 					},
 					{
-						value: "barrio_cerrado",
-						label: "Vive en barrio cerrado o country.",
+						value: "Vive en barrio cerrado o country",
+						label: "Vive en barrio cerrado o country",
 					},
 				],
 			},
@@ -142,8 +142,9 @@ const riskFields = {
 				required: false,
 				options: [
 					{ value: "", label: "Selecciona..." },
-					{ value: "permanente", label: "Permanente, vivo ahí" },
-					{ value: "alquilo", label: "Alquilo Propiedad" },
+					{ value: "Permanente", label: "Permanente" },
+					{ value: "Temporal", label: "Vivienda Temporal" },
+					{ value: "Alquiler", label: "Alquiler" },
 				],
 			},
 			{
@@ -280,7 +281,7 @@ async function loadBrands() {
 
 		return brands;
 	} catch (error) {
-		console.error("Error al cargar las marcas:", error);
+		// console.error("Error al cargar las marcas:", error);
 
 		// Mostrar notificación de error
 		showNotification("Error con el servicio de infoauto. Por favor, intenta nuevamente mas tarde.", "error");
@@ -337,7 +338,7 @@ async function loadModels(brandCode, year) {
 		setSelectOptions("model", options);
 		return models;
 	} catch (error) {
-		console.error("Error al cargar los modelos:", error);
+		// console.error("Error al cargar los modelos:", error);
 		showNotification("Error cargando modelos. Intenta nuevamente más tarde.", "error");
 		const options = [
 			{ value: "", label: "Sin modelos disponibles..." }
@@ -410,7 +411,7 @@ async function showRiskSpecificFields(riskType) {
 		try {
 			await loadBrands();
 		} catch (error) {
-			console.error("Error al cargar marcas:", error);
+			// console.error("Error al cargar marcas:", error);
 			// Continuar con el renderizado aunque haya error
 		}
 	}
@@ -482,7 +483,7 @@ async function showRiskSpecificFields(riskType) {
 								.join("");
 						}
 					} catch (error) {
-						console.error("Error al recargar marcas:", error);
+						// console.error("Error al recargar marcas:", error);
 					}
 				}
 			});
@@ -559,7 +560,7 @@ async function handleFormSubmit(e) {
 			const brandValue = brandSelectEl ? brandSelectEl.value : "";
 			const yearValue = yearSelectEl ? yearSelectEl.value : "";
 			const modelValue = modelSelectEl ? modelSelectEl.value : "";
-			console.log(modelValue)
+			// console.log(modelValue)
 			if (!brandValue) {
 				showNotification("Seleccioná una marca.", "warning");
 				return;
@@ -585,6 +586,10 @@ async function handleFormSubmit(e) {
 		// Agregar el tipo de oportunidad
 		formObject.typeOfOpportunity = API_CONFIG.typeOfOpportunity[selectedRisk];
 
+		//Conversion de tipo 
+		if (formObject.typeOfOpportunity == "Vida_Grupo") {
+			formObject.spouseQuotes = formObject.spouseQuotes = 'on' ? 'Si' : 'No'
+		}
 
 		if (formObject.typeOfOpportunity == "Autos_y_motos") {
 			// Separar modelo y codigo infoauto
@@ -632,7 +637,7 @@ async function handleFormSubmit(e) {
 			throw new Error(`Error ${response.status}: ${response.statusText}`);
 		}
 	} catch (error) {
-		console.error("Error al enviar la cotización:", error);
+		// console.error("Error al enviar la cotización:", error);
 		showNotification(
 			"Error al enviar la cotización. Por favor, intenta nuevamente mas tarde.",
 			"error"
