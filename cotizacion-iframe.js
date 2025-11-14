@@ -8,10 +8,10 @@ const API_CONFIG = {
 	brandsUrl: "https://vehiclesservice.azurewebsites.net/api/getBrand", // Endpoint para obtener marcas de vehículos
 	modelsUrl: "https://vehiclesservice.azurewebsites.net/api/getModels", // Endpoint para obtener modelos por marca/año
 	typeOfOpportunity: {
+		auto: "Autos_y_motos",
 		hogar: "Hogar",
 		alquiler: "Caucion",
 		vida: 'Vida_Grupo',
-		auto: "Autos_y_motos",
 	},
 };
 
@@ -212,6 +212,10 @@ const riskFields = {
 
 // Intro por riesgo
 const riskIntroConfig = {
+	auto: {
+		title: "Autos y Moto",
+		desc: "Asegurá tu auto o Moto con planes flexibles y completos",
+	},
 	hogar: {
 		title: "Seguro de Hogar",
 		desc: "Protegé tu hogar con una cobertura a medida",
@@ -223,10 +227,6 @@ const riskIntroConfig = {
 	vida: {
 		title: "Vida - Multiplo de Sueldo Empleado y conyuge",
 		desc: "Tarifa Preferencial",
-	},
-	auto: {
-		title: "Autos y Moto",
-		desc: "Asegurá tu auto o Moto con planes flexibles y completos",
 	},
 };
 
@@ -651,7 +651,7 @@ async function handleFormSubmit(e) {
 
 function showNotification(message, type = "info") {
 	const notification = document.createElement("div");
-	notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm transform transition-all duration-300 translate-x-full`;
+	notification.className = `fixed bottom-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm transform transition-all duration-300 translate-x-full`;
 	const colors = {
 		success: "bg-green-500 text-white",
 		error: "bg-red-500 text-white",
