@@ -68,14 +68,14 @@ const riskFields = {
 				label: "Codigo Postal",
 				type: "number",
 				required: false,
-				extra:"min='1000' max='9999'"
+				extra: "min='1000' max='9999'"
 			},
 			{
 				name: "age",
 				label: "Edad",
 				type: "number",
 				required: false,
-				extra:"min='18' max='99'"
+				extra: "min='18' max='99'"
 			}, {
 				name: "gender",
 				label: "Genero",
@@ -113,8 +113,8 @@ const riskFields = {
 			{
 				name: "postalCode",
 				label: "Código Postal",
-				type: "text",
-				extra:"min='1000' max='9999'",
+				type: "number",
+				extra: "step='1' min='1000' max='9999'",
 				required: false,
 			},
 			{
@@ -155,7 +155,7 @@ const riskFields = {
 				name: "coveredSquareMeters",
 				label: "Metros Cubiertos (m2)",
 				type: "number",
-				extra:"min='10' max='99999'",
+				extra: "step='1' min='10' max='99999'",
 				required: false,
 			},
 		],
@@ -167,8 +167,8 @@ const riskFields = {
 				name: "rentAmount",
 				label: "Monto de Alquiler",
 				type: "number",
-				extra:"min='0' step='0.01' inputmode='decimal'",
-				required: false,		
+				extra: "min='0' step='0.01' inputmode='decimal'",
+				required: false,
 			},
 			{
 				name: "validity",
@@ -198,7 +198,7 @@ const riskFields = {
 				name: "salary",
 				label: "Sueldo bruto",
 				type: "Number",
-				extra:"min='0' step='0.01' inputmode='decimal'",
+				extra: "min='0' step='0.01' inputmode='decimal'",
 				required: false,
 			},
 			{
@@ -428,13 +428,13 @@ async function showRiskSpecificFields(riskType) {
 			if (field.type === "select") {
 				return `<div><label for="${field.name
 					}" class="block text-sm font-medium text-secondary-700 mb-2">${field.label
-					} ${!field.required && " *" }</label><select id="${field.name}" name="${field.name}" ${field.required ? "required" : ""
+					} ${!field.required && " *"}</label><select id="${field.name}" name="${field.name}" ${field.required ? "required" : ""
 					} class="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">${field.options
 						.map((opt) => `<option value="${opt.value}">${opt.label}</option>`)
 						.join("")}</select></div>`;
 			} else if (field.type === "radio") {
 				return `<div>
-          <span class="block text-sm font-medium text-secondary-700 mb-2">${field.label} ${!field.required && "*" }</span>
+          <span class="block text-sm font-medium text-secondary-700 mb-2">${field.label} ${!field.required && "*"}</span>
           <div class="pl-2 h-10 flex items-center space-x-6">
             ${field.options
 						.map(
@@ -463,7 +463,7 @@ async function showRiskSpecificFields(riskType) {
 			} else {
 				return `<div><label for="${field.name
 					}" class="block text-sm font-medium text-secondary-700 mb-2">${field.label
-					} ${!field.required && " *" }</label><input type="${field.type}" id="${field.name}" name="${field.name
+					} ${!field.required && " *"}</label><input type="${field.type}" id="${field.name}" name="${field.name
 					}" ${field.required ? "required" : ""
 					} ${field.extra} class="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"></div>`;
 			}
